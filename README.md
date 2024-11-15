@@ -1,2 +1,2 @@
-# jpa_query_language
-Tool for building query language interpreter to use against a REST API, based on the JPA Criteria API
+# criteria_query_language
+API for building query language interpreters based on the JPA Criteria API
