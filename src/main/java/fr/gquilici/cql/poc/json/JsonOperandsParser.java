@@ -1,4 +1,4 @@
-package fr.gquilici.cql.json;
+package fr.gquilici.cql.poc.json;
 
 import java.time.Instant;
 import java.time.LocalDate;

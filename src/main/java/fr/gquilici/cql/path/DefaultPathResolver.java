@@ -1,7 +1,8 @@
-package fr.gquilici.cql.operator;
+package fr.gquilici.cql.path;
 
 import org.springframework.util.Assert;
 
+import fr.gquilici.cql.operator.PathResolver;
 import jakarta.persistence.criteria.Path;
 import jakarta.persistence.criteria.Root;
 

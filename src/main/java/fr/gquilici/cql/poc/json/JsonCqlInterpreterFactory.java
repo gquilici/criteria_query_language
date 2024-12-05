@@ -1,13 +1,13 @@
-package fr.gquilici.cql.json;
+package fr.gquilici.cql.poc.json;
 
 import com.fasterxml.jackson.databind.JsonNode;
 
 import fr.gquilici.cql.CqlInterpreterFactory;
 import fr.gquilici.cql.FilterParser;
+import fr.gquilici.cql.OperandsParser;
 import fr.gquilici.cql.operator.AndOperator;
 import fr.gquilici.cql.operator.BetweenOperator;
 import fr.gquilici.cql.operator.ContainsOperator;
-import fr.gquilici.cql.operator.DefaultPathResolver;
 import fr.gquilici.cql.operator.EndsWithOperator;
 import fr.gquilici.cql.operator.EqualsOperator;
 import fr.gquilici.cql.operator.ExistsOperator;
@@ -18,6 +18,8 @@ import fr.gquilici.cql.operator.NotOperator;
 import fr.gquilici.cql.operator.OrOperator;
 import fr.gquilici.cql.operator.PathResolver;
 import fr.gquilici.cql.operator.StartsWithOperator;
+import fr.gquilici.cql.operator.StringExpressionFormatter;
+import fr.gquilici.cql.path.DefaultPathResolver;
 
 public class JsonCqlInterpreterFactory implements CqlInterpreterFactory<JsonNode> {
 
@@ -26,8 +28,8 @@ public class JsonCqlInterpreterFactory implements CqlInterpreterFactory<JsonNode
 	public JsonCqlInterpreterFactory() {
 		filterParser = new JsonFilterParser();
 		PathResolver pathResolver = new DefaultPathResolver();
-		JsonOperandsParser operandsParser = new JsonOperandsParser();
-		JsonStringExpressionFormatter expressionFormatter = new JsonStringExpressionFormatter();
+		OperandsParser<JsonNode> operandsParser = new JsonOperandsParser();
+		StringExpressionFormatter<JsonNode> expressionFormatter = new JsonStringExpressionFormatter();
 
 		filterParser.registerOperator("$and", new AndOperator<>(filterParser));
 		filterParser.registerOperator("$or", new OrOperator<>(filterParser));

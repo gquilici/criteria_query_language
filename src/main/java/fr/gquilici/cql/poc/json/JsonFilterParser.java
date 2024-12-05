@@ -1,4 +1,4 @@
-package fr.gquilici.cql.json;
+package fr.gquilici.cql.poc.json;
 
 import java.util.ArrayList;
 import java.util.HashMap;

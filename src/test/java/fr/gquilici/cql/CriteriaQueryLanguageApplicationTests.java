@@ -19,11 +19,11 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import fr.gquilici.cql.json.JsonCqlInterpreterFactory;
 import fr.gquilici.cql.poc.Company;
 import fr.gquilici.cql.poc.CompanyRepository;
 import fr.gquilici.cql.poc.Employee;
 import fr.gquilici.cql.poc.EmployeeRepository;
+import fr.gquilici.cql.poc.json.JsonCqlInterpreterFactory;
 
 @SpringBootTest
 @TestInstance(Lifecycle.PER_CLASS)
