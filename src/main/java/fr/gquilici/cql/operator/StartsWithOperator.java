@@ -1,7 +1,6 @@
 package fr.gquilici.cql.operator;
 
 import fr.gquilici.cql.OperandsParser;
-import fr.gquilici.cql.PathResolver;
 
 public class StartsWithOperator<N> extends LikeOperator<N> {
 

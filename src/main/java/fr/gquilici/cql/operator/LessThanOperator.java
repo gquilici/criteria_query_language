@@ -9,7 +9,6 @@ import org.springframework.data.jpa.domain.Specification;
 import fr.gquilici.cql.Filter;
 import fr.gquilici.cql.OperandsParser;
 import fr.gquilici.cql.Operator;
-import fr.gquilici.cql.PathResolver;
 import jakarta.persistence.criteria.Path;
 
 public class LessThanOperator<N> implements Operator<N> {
@@ -29,7 +28,7 @@ public class LessThanOperator<N> implements Operator<N> {
 	@SuppressWarnings("unchecked")
 	public <T> Specification<T> build(Filter<N> filter) {
 		return (root, query, builder) -> {
-			Path<?> path = pathResolver.resolve(filter.property(), root);
+			Path<?> path = pathResolver.resolve(root, filter.property());
 			Class<?> type = path.getJavaType();
 
 			if (type.equals(String.class)) {

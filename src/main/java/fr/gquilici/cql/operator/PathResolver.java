@@ -1,13 +1,13 @@
-package fr.gquilici.cql;
+package fr.gquilici.cql.operator;
 
 import org.springframework.util.Assert;
 
 import jakarta.persistence.criteria.Path;
 import jakarta.persistence.criteria.Root;
 
-public class PathResolver {
+public interface PathResolver {
 
-	public <R, T> Path<R> resolve(String property, Root<T> root) {
+	public default <R, T> Path<R> resolve(Root<T> root, String property) {
 		Assert.notNull(property, "Le chemin de la propriété cible ne doit pas être nul");
 		try {
 			String[] segments = property.split("\\.");
