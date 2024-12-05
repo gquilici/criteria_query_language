@@ -8,7 +8,7 @@ import fr.gquilici.cql.Operator;
 
 public class NotOperator<N> implements Operator<N> {
 
-	private FilterParser<N> filterParser;
+	private final FilterParser<N> filterParser;
 
 	public NotOperator(FilterParser<N> filterParser) {
 		this.filterParser = filterParser;

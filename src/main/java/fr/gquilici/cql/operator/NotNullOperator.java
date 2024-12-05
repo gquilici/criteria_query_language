@@ -9,7 +9,7 @@ import jakarta.persistence.criteria.Path;
 
 public class NotNullOperator implements Operator<Object> {
 
-	private PathResolver pathResolver;
+	private final PathResolver pathResolver;
 
 	public NotNullOperator(PathResolver pathResolver) {
 		this.pathResolver = pathResolver;

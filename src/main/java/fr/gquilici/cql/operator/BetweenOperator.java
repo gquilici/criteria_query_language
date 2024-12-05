@@ -15,8 +15,8 @@ import jakarta.persistence.criteria.Path;
 
 public class BetweenOperator<N> implements Operator<N> {
 
-	private PathResolver pathResolver;
-	private OperandsParser<N> operandsParser;
+	private final PathResolver pathResolver;
+	private final OperandsParser<N> operandsParser;
 	private StringExpressionFormatter stringExpressionFormatter;
 
 	public BetweenOperator(PathResolver pathResolver, OperandsParser<N> operandsParser) {

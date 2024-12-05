@@ -7,7 +7,7 @@ import fr.gquilici.cql.Operator;
 
 public class NegateOperator<N> implements Operator<N> {
 
-	private Operator<N> delegate;
+	private final Operator<N> delegate;
 
 	public NegateOperator(Operator<N> delegate) {
 		this.delegate = delegate;

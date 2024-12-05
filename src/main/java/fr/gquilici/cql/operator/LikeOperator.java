@@ -14,11 +14,11 @@ import jakarta.persistence.criteria.Path;
 
 public class LikeOperator<N> implements Operator<N> {
 
-	private PathResolver pathResolver;
-	private OperandsParser<N> operandsParser;
+	private final PathResolver pathResolver;
+	private final OperandsParser<N> operandsParser;
 	private StringExpressionFormatter stringExpressionFormatter;
-	private String prefix;
-	private String suffix;
+	private final String prefix;
+	private final String suffix;
 
 	public LikeOperator(PathResolver pathResolver, OperandsParser<N> operandsParser) {
 		this(pathResolver, operandsParser, "", "");

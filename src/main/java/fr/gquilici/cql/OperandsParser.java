@@ -9,7 +9,7 @@ import java.util.List;
 
 public interface OperandsParser<N> {
 
-	default List<?> parseAs(List<N> operands, Class<?> type) {
+	public default List<?> parseAs(List<N> operands, Class<?> type) {
 		if (String.class.equals(type)) {
 			return parseAsString(operands);
 		}
@@ -41,24 +41,24 @@ public interface OperandsParser<N> {
 				"Le type d'opérande <" + type.getSimpleName() + "> n'est pas pris en charge");
 	}
 
-	List<String> parseAsString(List<N> operands);
+	public List<String> parseAsString(List<N> operands);
 
-	List<Boolean> parseAsBoolean(List<N> operands);
+	public List<Boolean> parseAsBoolean(List<N> operands);
 
-	List<Integer> parseAsInteger(List<N> operands);
+	public List<Integer> parseAsInteger(List<N> operands);
 
-	List<Long> parseAsLong(List<N> operands);
+	public List<Long> parseAsLong(List<N> operands);
 
-	List<Float> getAsFloat(List<N> operands);
+	public List<Float> getAsFloat(List<N> operands);
 
-	List<Double> parseAsDouble(List<N> operands);
+	public List<Double> parseAsDouble(List<N> operands);
 
-	List<LocalDate> parseAsLocalDate(List<N> operands);
+	public List<LocalDate> parseAsLocalDate(List<N> operands);
 
-	List<Instant> parseAsInstant(List<N> operands);
+	public List<Instant> parseAsInstant(List<N> operands);
 
 	@SuppressWarnings("unchecked")
-	default <T> List<T> parseAsEnumValue(List<N> operands, Class<T> type) {
+	public default <T> List<T> parseAsEnumValue(List<N> operands, Class<T> type) {
 		// Invoquer la méthode static valueOf de l'enum pour obtenir la constante
 		Method valueOf = null;
 		try {

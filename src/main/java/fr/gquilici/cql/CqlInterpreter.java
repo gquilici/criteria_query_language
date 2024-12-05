@@ -4,8 +4,8 @@ import org.springframework.data.jpa.domain.Specification;
 
 public class CqlInterpreter<N, T> {
 
-	private FilterParser<N> filterParser;
-	private JoinsBuilder<T> joinsMaker;
+	private final FilterParser<N> filterParser;
+	private final JoinsBuilder<T> joinsMaker;
 
 	public CqlInterpreter(FilterParser<N> filterParser) {
 		this(filterParser, (root) -> {});

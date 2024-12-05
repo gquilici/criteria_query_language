@@ -15,8 +15,8 @@ import jakarta.persistence.criteria.Path;
 
 public class GreaterThanOperator<N> implements Operator<N> {
 
-	private PathResolver pathResolver;
-	private OperandsParser<N> operandsParser;
+	private final PathResolver pathResolver;
+	private final OperandsParser<N> operandsParser;
 	private StringExpressionFormatter stringExpressionFormatter;
 
 	public GreaterThanOperator(PathResolver pathResolver, OperandsParser<N> operandsParser) {

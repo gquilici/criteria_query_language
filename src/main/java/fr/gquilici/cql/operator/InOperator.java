@@ -14,8 +14,8 @@ import jakarta.persistence.criteria.Path;
 
 public class InOperator<N> implements Operator<N> {
 
-	private PathResolver pathResolver;
-	private OperandsParser<N> operandsParser;
+	private final PathResolver pathResolver;
+	private final OperandsParser<N> operandsParser;
 	private StringExpressionFormatter stringExpressionFormatter;
 
 	public InOperator(PathResolver pathResolver, OperandsParser<N> operandsParser) {

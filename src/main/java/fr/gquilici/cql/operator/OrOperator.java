@@ -10,7 +10,7 @@ import fr.gquilici.cql.Operator;
 
 public class OrOperator<N> implements Operator<N> {
 
-	private FilterParser<N> filterParser;
+	private final FilterParser<N> filterParser;
 
 	public OrOperator(FilterParser<N> filterParser) {
 		this.filterParser = filterParser;

@@ -10,7 +10,7 @@ import fr.gquilici.cql.Operator;
 
 public class AndOperator<N> implements Operator<N> {
 
-	private FilterParser<N> filterParser;
+	private final FilterParser<N> filterParser;
 
 	public AndOperator(FilterParser<N> filterParser) {
 		this.filterParser = filterParser;
