@@ -15,7 +15,8 @@ import fr.gquilici.cql.Operator;
 public class JsonFilterParser implements FilterParser<JsonNode> {
 
 	private static final String PROPERTY_PATH_FIELD = "property";
-	private static final String OPERATOR_CODE_FIELD = "operator";
+	private static final String OPERATOR_FIELD = "operator";
+	private static final String OPERATOR_CODE_FIELD = "code";
 	private static final String OPERANDS_FIELD = "operands";
 
 	private final Map<String, Operator<JsonNode>> operators = new HashMap<>();
@@ -29,7 +30,7 @@ public class JsonFilterParser implements FilterParser<JsonNode> {
 	public Filter<JsonNode> parse(JsonNode criteria) {
 		String property = parsePropertyPath(criteria);
 		Operator<JsonNode> operator = parseOperator(criteria);
-		JsonNode options = criteria; // Operator options are on the root object
+		JsonNode options = criteria.required(OPERATOR_FIELD);
 		List<JsonNode> operands = parseOperands(criteria);
 		return new Filter<>(property, operator, options, operands);
 	}
@@ -39,7 +40,10 @@ public class JsonFilterParser implements FilterParser<JsonNode> {
 	}
 
 	private Operator<JsonNode> parseOperator(JsonNode criteria) {
-		String operatorCode = criteria.required(OPERATOR_CODE_FIELD).textValue();
+		JsonNode operatorNode = criteria.required(OPERATOR_FIELD);
+		String operatorCode = operatorNode.isObject()
+				? operatorNode.required(OPERATOR_CODE_FIELD).textValue()
+				: operatorNode.textValue();
 		if (operators.containsKey(operatorCode)) {
 			return operators.get(operatorCode);
 		}

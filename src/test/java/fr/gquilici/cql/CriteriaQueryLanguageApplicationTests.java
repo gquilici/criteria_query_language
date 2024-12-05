@@ -108,7 +108,7 @@ class CriteriaQueryLanguageApplicationTests {
 	@Test
 	void requestWithIgnoreCase() throws JsonMappingException, JsonProcessingException {
 		String query = """
-				{ "property": "lastName", "operator": "$eq", "operands": ["dOE"], "ignoreCase": true }
+				{ "property": "lastName", "operator": { "code": "$eq",  "ignoreCase": true }, "operands": ["dOE"] }
 				""";
 		JsonNode json = objectMapper.readTree(query);
 
@@ -122,7 +122,7 @@ class CriteriaQueryLanguageApplicationTests {
 	@Test
 	void requestWithIgnoreAccents() throws JsonMappingException, JsonProcessingException {
 		String query = """
-				{ "property": "lastName", "operator": "$eq", "operands": ["Dôé"], "ignoreAccents": true }
+				{ "property": "lastName", "operator": { "code": "$eq", "ignoreAccents": true }, "operands": ["Dôé"] }
 				""";
 		JsonNode json = objectMapper.readTree(query);
 
@@ -230,7 +230,7 @@ class CriteriaQueryLanguageApplicationTests {
 	@Test
 	void illegalIgnoreCase() throws JsonMappingException, JsonProcessingException {
 		String query = """
-				{ "property": "lastName", "operator": "$eq", "operands": ["dOE"], "ignoreCase": "123" }
+				{ "property": "lastName", "operator": { "code": "$eq", "ignoreCase": "123" }, "operands": ["dOE"] }
 				""";
 		JsonNode json = objectMapper.readTree(query);
 
@@ -243,7 +243,7 @@ class CriteriaQueryLanguageApplicationTests {
 	@Test
 	void illegalIgnoreAccents() throws JsonMappingException, JsonProcessingException {
 		String query = """
-				{ "property": "lastName", "operator": "$eq", "operands": ["Dôé"], "ignoreAccents": "123" }
+				{ "property": "lastName", "operator": { "code": "$eq", "ignoreAccents": "123" }, "operands": ["Dôé"] }
 				""";
 		JsonNode json = objectMapper.readTree(query);
 
