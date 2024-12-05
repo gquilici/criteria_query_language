@@ -74,7 +74,7 @@ class CriteriaQueryLanguageApplicationTests {
 
 		JsonCqlInterpreterFactory cqlInterpreterFactory = new JsonCqlInterpreterFactory();
 		companyCqlInterpreter = cqlInterpreterFactory.build();
-		employeeCqlInterpreter = cqlInterpreterFactory.build((root) -> root.join("company"));
+		employeeCqlInterpreter = cqlInterpreterFactory.build();
 	}
 
 	@Test
