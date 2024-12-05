@@ -134,6 +134,20 @@ class CriteriaQueryLanguageApplicationTests {
 	}
 
 	@Test
+	void requestWithExists() throws JsonMappingException, JsonProcessingException {
+		String query = """
+				{ "property": "code", "operator": { "code": "$ex", "filter": { "property": "employees.lastName", "operator": "$in", "operands": ["Doe", "Doppler"] } } }
+				""";
+		JsonNode json = objectMapper.readTree(query);
+
+		Specification<Company> specification = companyCqlInterpreter.build(json);
+		List<Company> companies = companyRepository.findAll(specification);
+
+		assertThat(companies).hasSize(1);
+		assertThat(companies).first().isEqualTo(company1);
+	}
+
+	@Test
 	void missingProperty() throws JsonMappingException, JsonProcessingException {
 		String query = """
 				{ "operator": "$eq", "operands": ["Doe"] }
@@ -178,6 +192,23 @@ class CriteriaQueryLanguageApplicationTests {
 				"Une propriété inconnue devrait déclencher une exception");
 		assertThat(e.getCause().getClass()).isEqualTo(IllegalArgumentException.class);
 		assertThat(e.getCause().getMessage()).isEqualTo("Le chemin de propriété <name> n'est pas supporté");
+	}
+
+	@Test
+	void unreachableProperty() throws JsonMappingException, JsonProcessingException {
+		String query = """
+				{ "property": "employees.lastName", "operator": "$eq", "operands": ["Doe"] }
+				""";
+		JsonNode json = objectMapper.readTree(query);
+
+		Specification<Company> specification = companyCqlInterpreter.build(json);
+		System.err.println(companyRepository.findAll(specification));
+
+		InvalidDataAccessApiUsageException e = assertThrows(InvalidDataAccessApiUsageException.class,
+				() -> companyRepository.findAll(specification),
+				"Une propriété non jointe devrait déclencher une exception");
+		assertThat(e.getCause().getClass()).isEqualTo(IllegalArgumentException.class);
+		assertThat(e.getCause().getMessage()).isEqualTo("Le chemin de propriété <employees.lastName> n'est pas supporté");
 	}
 
 	@Test
