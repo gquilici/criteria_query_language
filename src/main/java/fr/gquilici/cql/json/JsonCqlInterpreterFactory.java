@@ -26,6 +26,7 @@ public class JsonCqlInterpreterFactory {
 	private final JsonFilterParser filterParser = new JsonFilterParser();
 	private final PathResolver pathResolver = new PathResolver();
 	private final JsonOperandsParser operandsParser = new JsonOperandsParser();
+	private final JsonStringExpressionFormatter expressionFormatter = new JsonStringExpressionFormatter();
 
 	public JsonCqlInterpreterFactory() {
 		Map<String, Operator<JsonNode>> operators = new HashMap<>();
@@ -33,31 +34,36 @@ public class JsonCqlInterpreterFactory {
 		operators.put("$or", new OrOperator<>(filterParser));
 		operators.put("$not", new NotOperator<>(filterParser));
 
-		EqualsOperator<JsonNode> equalsOperator = new EqualsOperator<>(pathResolver, operandsParser);
+		EqualsOperator<JsonNode> equalsOperator = new EqualsOperator<>(pathResolver, operandsParser,
+				expressionFormatter);
 		operators.put("$eq", equalsOperator);
 		operators.put("$neq", new NegateOperator<>(equalsOperator));
 
-		BetweenOperator<JsonNode> betweenOperator = new BetweenOperator<>(pathResolver, operandsParser);
+		BetweenOperator<JsonNode> betweenOperator = new BetweenOperator<>(pathResolver, operandsParser,
+				expressionFormatter);
 		operators.put("$bw", betweenOperator);
 		operators.put("$nbw", new NegateOperator<>(betweenOperator));
 
-		InOperator<JsonNode> inOperator = new InOperator<>(pathResolver, operandsParser);
+		InOperator<JsonNode> inOperator = new InOperator<>(pathResolver, operandsParser, expressionFormatter);
 		operators.put("$in", inOperator);
 		operators.put("$nin", new NegateOperator<>(inOperator));
 
-		LikeOperator<JsonNode> likeOperator = new LikeOperator<>(pathResolver, operandsParser);
+		LikeOperator<JsonNode> likeOperator = new LikeOperator<>(pathResolver, operandsParser, expressionFormatter);
 		operators.put("$lk", likeOperator);
 		operators.put("$nlk", new NegateOperator<>(likeOperator));
 
-		StartsWithOperator<JsonNode> startsWithOperator = new StartsWithOperator<>(pathResolver, operandsParser);
+		StartsWithOperator<JsonNode> startsWithOperator = new StartsWithOperator<>(pathResolver, operandsParser,
+				expressionFormatter);
 		operators.put("$sw", startsWithOperator);
 		operators.put("$nsw", new NegateOperator<>(startsWithOperator));
 
-		ContainsOperator<JsonNode> containsOperator = new ContainsOperator<>(pathResolver, operandsParser);
+		ContainsOperator<JsonNode> containsOperator = new ContainsOperator<>(pathResolver, operandsParser,
+				expressionFormatter);
 		operators.put("$ct", containsOperator);
 		operators.put("$nct", new NegateOperator<>(containsOperator));
 
-		EndsWithOperator<JsonNode> endsWithOperator = new EndsWithOperator<>(pathResolver, operandsParser);
+		EndsWithOperator<JsonNode> endsWithOperator = new EndsWithOperator<>(pathResolver, operandsParser,
+				expressionFormatter);
 		operators.put("$ew", endsWithOperator);
 		operators.put("$new", new NegateOperator<>(endsWithOperator));
 
