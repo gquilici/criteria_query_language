@@ -8,7 +8,6 @@ import fr.gquilici.cql.Filter;
 import fr.gquilici.cql.OperandsParser;
 import fr.gquilici.cql.Operator;
 import fr.gquilici.cql.PathResolver;
-import fr.gquilici.cql.StringExpressionFormatter;
 import jakarta.persistence.criteria.Expression;
 import jakarta.persistence.criteria.Path;
 
@@ -16,12 +15,13 @@ public class InOperator<N> implements Operator<N> {
 
 	private final PathResolver pathResolver;
 	private final OperandsParser<N> operandsParser;
-	private StringExpressionFormatter stringExpressionFormatter;
+	private final StringExpressionFormatter<N> expressionFormatter;
 
-	public InOperator(PathResolver pathResolver, OperandsParser<N> operandsParser) {
+	public InOperator(PathResolver pathResolver, OperandsParser<N> operandsParser,
+			StringExpressionFormatter<N> expressionFormatter) {
 		this.pathResolver = pathResolver;
 		this.operandsParser = operandsParser;
-		this.stringExpressionFormatter = new StringExpressionFormatter();
+		this.expressionFormatter = expressionFormatter;
 	}
 
 	@Override
@@ -34,8 +34,8 @@ public class InOperator<N> implements Operator<N> {
 
 			if (type.equals(String.class)) {
 				List<String> operands = operandsParser.parseAsString(filter.operands());
-				var formatPath = stringExpressionFormatter.format(builder, (Path<String>) path, filter.options());
-				var formatOperands = stringExpressionFormatter.format(builder, operands, filter.options());
+				var formatPath = expressionFormatter.format(builder, (Path<String>) path, filter.options());
+				var formatOperands = expressionFormatter.format(builder, operands, filter.options());
 				return formatPath.in(formatOperands.toArray(new Expression[0]));
 			}
 

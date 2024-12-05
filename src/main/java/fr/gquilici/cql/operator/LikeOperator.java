@@ -8,7 +8,6 @@ import fr.gquilici.cql.Filter;
 import fr.gquilici.cql.OperandsParser;
 import fr.gquilici.cql.Operator;
 import fr.gquilici.cql.PathResolver;
-import fr.gquilici.cql.StringExpressionFormatter;
 import jakarta.persistence.criteria.Expression;
 import jakarta.persistence.criteria.Path;
 
@@ -16,18 +15,20 @@ public class LikeOperator<N> implements Operator<N> {
 
 	private final PathResolver pathResolver;
 	private final OperandsParser<N> operandsParser;
-	private StringExpressionFormatter stringExpressionFormatter;
+	private final StringExpressionFormatter<N> expressionFormatter;
 	private final String prefix;
 	private final String suffix;
 
-	public LikeOperator(PathResolver pathResolver, OperandsParser<N> operandsParser) {
-		this(pathResolver, operandsParser, "", "");
+	public LikeOperator(PathResolver pathResolver, OperandsParser<N> operandsParser,
+			StringExpressionFormatter<N> expressionFormatter) {
+		this(pathResolver, operandsParser, expressionFormatter, "", "");
 	}
 
-	public LikeOperator(PathResolver pathResolver, OperandsParser<N> operandsParser, String prefix, String suffix) {
+	public LikeOperator(PathResolver pathResolver, OperandsParser<N> operandsParser,
+			StringExpressionFormatter<N> expressionFormatter, String prefix, String suffix) {
 		this.pathResolver = pathResolver;
 		this.operandsParser = operandsParser;
-		this.stringExpressionFormatter = new StringExpressionFormatter();
+		this.expressionFormatter = expressionFormatter;
 		this.prefix = prefix;
 		this.suffix = suffix;
 	}
@@ -46,8 +47,8 @@ public class LikeOperator<N> implements Operator<N> {
 			List<String> operands = operandsParser.parseAsString(filter.operands());
 			Expression<String> literal = builder.literal(prefix + operands.get(0) + suffix);
 
-			var formatPath = stringExpressionFormatter.format(builder, (Path<String>) path, filter.options());
-			var pattern = stringExpressionFormatter.format(builder, literal, filter.options());
+			var formatPath = expressionFormatter.format(builder, (Path<String>) path, filter.options());
+			var pattern = expressionFormatter.format(builder, literal, filter.options());
 			return builder.like(formatPath, pattern);
 		};
 	}

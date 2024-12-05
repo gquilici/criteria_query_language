@@ -5,8 +5,9 @@ import fr.gquilici.cql.PathResolver;
 
 public class EndsWithOperator<N> extends LikeOperator<N> {
 
-	public EndsWithOperator(PathResolver pathResolver, OperandsParser<N> operandsParser) {
-		super(pathResolver, operandsParser, "%", "");
+	public EndsWithOperator(PathResolver pathResolver, OperandsParser<N> operandsParser,
+			StringExpressionFormatter<N> expressionFormatter) {
+		super(pathResolver, operandsParser, expressionFormatter, "%", "");
 	}
 
 }

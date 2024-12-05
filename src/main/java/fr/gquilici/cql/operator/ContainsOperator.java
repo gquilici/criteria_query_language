@@ -5,8 +5,9 @@ import fr.gquilici.cql.PathResolver;
 
 public class ContainsOperator<N> extends LikeOperator<N> {
 
-	public ContainsOperator(PathResolver pathResolver, OperandsParser<N> operandsParser) {
-		super(pathResolver, operandsParser, "%", "%");
+	public ContainsOperator(PathResolver pathResolver, OperandsParser<N> operandsParser,
+			StringExpressionFormatter<N> expressionFormatter) {
+		super(pathResolver, operandsParser, expressionFormatter, "%", "%");
 	}
 
 }
