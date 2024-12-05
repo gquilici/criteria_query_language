@@ -5,20 +5,16 @@ import org.springframework.data.jpa.domain.Specification;
 public class CqlInterpreter<N, T> {
 
 	private final FilterParser<N> filterParser;
-	private final JoinsBuilder<T> joinsMaker;
+	private final JoinsBuilder<T> joinsBuilder;
 
-	public CqlInterpreter(FilterParser<N> filterParser) {
-		this(filterParser, (root) -> {});
-	}
-
-	public CqlInterpreter(FilterParser<N> filterParser, JoinsBuilder<T> joinsMaker) {
+	public CqlInterpreter(FilterParser<N> filterParser, JoinsBuilder<T> joinsBuilder) {
 		this.filterParser = filterParser;
-		this.joinsMaker = joinsMaker;
+		this.joinsBuilder = joinsBuilder;
 	}
 
 	public Specification<T> build(N criteria) {
 		return (root, query, builder) -> {
-			joinsMaker.build(root);
+			joinsBuilder.build(root);
 			Filter<N> filter = filterParser.parse(criteria);
 			return filter.<T>build().toPredicate(root, query, builder);
 		};
