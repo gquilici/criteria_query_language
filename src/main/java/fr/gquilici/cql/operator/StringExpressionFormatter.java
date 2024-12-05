@@ -1,17 +1,17 @@
-package fr.gquilici.cql;
+package fr.gquilici.cql.operator;
 
 import java.util.List;
 
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.Expression;
 
-public class StringExpressionFormatter {
+public abstract class StringExpressionFormatter<N> {
 
 	private static final String TRANSLATE_ACCENTS   = "ÁÀÂÄÃÇÉÈÊËÍÌÎÏÑÓÒÔÖÕÚÙÛÜÝŸáàâäãçéèêëíìîïñóòôöõúùûüýÿ";
 	private static final String TRANSLATE_NO_ACCENT = "AAAAACEEEEIIIINOOOOOUUUUYYaaaaaceeeeiiiinooooouuuuyy";
 
 	public List<Expression<String>> format(CriteriaBuilder builder, List<?> operands,
-			OperatorOptions options) {
+			N options) {
 		return operands.stream()
 				.map(Object::toString)
 				.map(builder::literal)
@@ -20,11 +20,12 @@ public class StringExpressionFormatter {
 	}
 
 	public Expression<String> format(CriteriaBuilder builder, Expression<String> expression,
-			OperatorOptions options) {
-		if (options.ignoresCase()) {
+			N options) {
+		StringFormatterOptions parsedOptions = parse(options);
+		if (parsedOptions.ignoresCase()) {
 			expression = builder.lower(expression);
 		}
-		if (options.ignoresAccents()) {
+		if (parsedOptions.ignoresAccents()) {
 			expression = builder.function("translate", String.class,
 					expression,
 					builder.literal(TRANSLATE_ACCENTS),
@@ -32,5 +33,7 @@ public class StringExpressionFormatter {
 		}
 		return expression;
 	}
+
+	protected abstract StringFormatterOptions parse(N options);
 
 }
