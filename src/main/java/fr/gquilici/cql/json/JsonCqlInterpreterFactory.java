@@ -1,81 +1,79 @@
 package fr.gquilici.cql.json;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import com.fasterxml.jackson.databind.JsonNode;
 
-import fr.gquilici.cql.CqlInterpreter;
-import fr.gquilici.cql.JoinsBuilder;
-import fr.gquilici.cql.Operator;
-import fr.gquilici.cql.PathResolver;
+import fr.gquilici.cql.CqlInterpreterFactory;
+import fr.gquilici.cql.FilterParser;
 import fr.gquilici.cql.operator.AndOperator;
 import fr.gquilici.cql.operator.BetweenOperator;
 import fr.gquilici.cql.operator.ContainsOperator;
+import fr.gquilici.cql.operator.DefaultPathResolver;
 import fr.gquilici.cql.operator.EndsWithOperator;
 import fr.gquilici.cql.operator.EqualsOperator;
+import fr.gquilici.cql.operator.ExistsOperator;
 import fr.gquilici.cql.operator.InOperator;
 import fr.gquilici.cql.operator.LikeOperator;
 import fr.gquilici.cql.operator.NegateOperator;
 import fr.gquilici.cql.operator.NotOperator;
 import fr.gquilici.cql.operator.OrOperator;
+import fr.gquilici.cql.operator.PathResolver;
 import fr.gquilici.cql.operator.StartsWithOperator;
 
-public class JsonCqlInterpreterFactory {
+public class JsonCqlInterpreterFactory implements CqlInterpreterFactory<JsonNode> {
 
-	private final JsonFilterParser filterParser = new JsonFilterParser();
-	private final PathResolver pathResolver = new PathResolver();
-	private final JsonOperandsParser operandsParser = new JsonOperandsParser();
-	private final JsonStringExpressionFormatter expressionFormatter = new JsonStringExpressionFormatter();
+	private final JsonFilterParser filterParser;
 
 	public JsonCqlInterpreterFactory() {
-		Map<String, Operator<JsonNode>> operators = new HashMap<>();
-		operators.put("$and", new AndOperator<>(filterParser));
-		operators.put("$or", new OrOperator<>(filterParser));
-		operators.put("$not", new NotOperator<>(filterParser));
+		filterParser = new JsonFilterParser();
+		PathResolver pathResolver = new DefaultPathResolver();
+		JsonOperandsParser operandsParser = new JsonOperandsParser();
+		JsonStringExpressionFormatter expressionFormatter = new JsonStringExpressionFormatter();
+
+		filterParser.registerOperator("$and", new AndOperator<>(filterParser));
+		filterParser.registerOperator("$or", new OrOperator<>(filterParser));
+		filterParser.registerOperator("$not", new NotOperator<>(filterParser));
 
 		EqualsOperator<JsonNode> equalsOperator = new EqualsOperator<>(pathResolver, operandsParser,
 				expressionFormatter);
-		operators.put("$eq", equalsOperator);
-		operators.put("$neq", new NegateOperator<>(equalsOperator));
+		filterParser.registerOperator("$eq", equalsOperator);
+		filterParser.registerOperator("$neq", new NegateOperator<>(equalsOperator));
 
 		BetweenOperator<JsonNode> betweenOperator = new BetweenOperator<>(pathResolver, operandsParser,
 				expressionFormatter);
-		operators.put("$bw", betweenOperator);
-		operators.put("$nbw", new NegateOperator<>(betweenOperator));
+		filterParser.registerOperator("$bw", betweenOperator);
+		filterParser.registerOperator("$nbw", new NegateOperator<>(betweenOperator));
 
 		InOperator<JsonNode> inOperator = new InOperator<>(pathResolver, operandsParser, expressionFormatter);
-		operators.put("$in", inOperator);
-		operators.put("$nin", new NegateOperator<>(inOperator));
+		filterParser.registerOperator("$in", inOperator);
+		filterParser.registerOperator("$nin", new NegateOperator<>(inOperator));
 
 		LikeOperator<JsonNode> likeOperator = new LikeOperator<>(pathResolver, operandsParser, expressionFormatter);
-		operators.put("$lk", likeOperator);
-		operators.put("$nlk", new NegateOperator<>(likeOperator));
+		filterParser.registerOperator("$lk", likeOperator);
+		filterParser.registerOperator("$nlk", new NegateOperator<>(likeOperator));
 
 		StartsWithOperator<JsonNode> startsWithOperator = new StartsWithOperator<>(pathResolver, operandsParser,
 				expressionFormatter);
-		operators.put("$sw", startsWithOperator);
-		operators.put("$nsw", new NegateOperator<>(startsWithOperator));
+		filterParser.registerOperator("$sw", startsWithOperator);
+		filterParser.registerOperator("$nsw", new NegateOperator<>(startsWithOperator));
 
 		ContainsOperator<JsonNode> containsOperator = new ContainsOperator<>(pathResolver, operandsParser,
 				expressionFormatter);
-		operators.put("$ct", containsOperator);
-		operators.put("$nct", new NegateOperator<>(containsOperator));
+		filterParser.registerOperator("$ct", containsOperator);
+		filterParser.registerOperator("$nct", new NegateOperator<>(containsOperator));
 
 		EndsWithOperator<JsonNode> endsWithOperator = new EndsWithOperator<>(pathResolver, operandsParser,
 				expressionFormatter);
-		operators.put("$ew", endsWithOperator);
-		operators.put("$new", new NegateOperator<>(endsWithOperator));
+		filterParser.registerOperator("$ew", endsWithOperator);
+		filterParser.registerOperator("$new", new NegateOperator<>(endsWithOperator));
 
-		filterParser.setOperators(operators);
+		ExistsOperator<JsonNode> existsOperator = new JsonExistsOperator(filterParser, pathResolver);
+		filterParser.registerOperator("$ex", existsOperator);
+		filterParser.registerOperator("$nex", new NegateOperator<>(existsOperator));
 	}
 
-	public <T> CqlInterpreter<JsonNode, T> build() {
-		return new CqlInterpreter<>(filterParser, (root) -> {});
-	}
-
-	public <T> CqlInterpreter<JsonNode, T> build(JoinsBuilder<T> joinsBuilder) {
-		return new CqlInterpreter<>(filterParser, joinsBuilder);
+	@Override
+	public FilterParser<JsonNode> getFilterParser() {
+		return filterParser;
 	}
 
 }

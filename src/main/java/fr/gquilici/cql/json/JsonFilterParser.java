@@ -21,9 +21,8 @@ public class JsonFilterParser implements FilterParser<JsonNode> {
 
 	private final Map<String, Operator<JsonNode>> operators = new HashMap<>();
 
-	public void setOperators(Map<String, Operator<JsonNode>> operators) {
-		this.operators.clear();
-		this.operators.putAll(operators);
+	public void registerOperator(String code, Operator<JsonNode> operator) {
+		this.operators.put(code, operator);
 	}
 
 	@Override
