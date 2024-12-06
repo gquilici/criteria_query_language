@@ -16,18 +16,19 @@ import fr.gquilici.cql.operator.LikeOperator;
 import fr.gquilici.cql.operator.NegateOperator;
 import fr.gquilici.cql.operator.NotOperator;
 import fr.gquilici.cql.operator.OrOperator;
-import fr.gquilici.cql.operator.PathResolver;
 import fr.gquilici.cql.operator.StartsWithOperator;
 import fr.gquilici.cql.operator.StringExpressionFormatter;
-import fr.gquilici.cql.path.DefaultPathResolver;
+import fr.gquilici.cql.path.BlackListPathResolver;
+import fr.gquilici.cql.path.PatternPathResolver;
 
 public class JsonCqlInterpreterFactory implements CqlInterpreterFactory<JsonNode> {
 
 	private final JsonFilterParser filterParser;
+	private final PatternPathResolver pathResolver;
 
 	public JsonCqlInterpreterFactory() {
 		filterParser = new JsonFilterParser();
-		PathResolver pathResolver = new DefaultPathResolver();
+		pathResolver = new BlackListPathResolver();
 		OperandsParser<JsonNode> operandsParser = new JsonOperandsParser();
 		StringExpressionFormatter<JsonNode> expressionFormatter = new JsonStringExpressionFormatter();
 
@@ -76,6 +77,10 @@ public class JsonCqlInterpreterFactory implements CqlInterpreterFactory<JsonNode
 	@Override
 	public FilterParser<JsonNode> getFilterParser() {
 		return filterParser;
+	}
+
+	public void restrictPaths(Class<?> rootType, String... patterns) {
+		pathResolver.register(rootType, patterns);
 	}
 
 }

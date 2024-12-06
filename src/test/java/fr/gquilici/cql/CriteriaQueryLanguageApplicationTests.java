@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
@@ -73,6 +74,8 @@ class CriteriaQueryLanguageApplicationTests {
 		employee12 = employeeRepository.save(employee12);
 
 		JsonCqlInterpreterFactory cqlInterpreterFactory = new JsonCqlInterpreterFactory();
+		cqlInterpreterFactory.restrictPaths(Company.class, "employees.firstName");
+		
 		companyCqlInterpreter = cqlInterpreterFactory.build();
 		employeeCqlInterpreter = cqlInterpreterFactory.build();
 	}
@@ -195,20 +198,19 @@ class CriteriaQueryLanguageApplicationTests {
 	}
 
 	@Test
+	@Transactional
 	void unreachableProperty() throws JsonMappingException, JsonProcessingException {
 		String query = """
-				{ "property": "employees.lastName", "operator": "$eq", "operands": ["Doe"] }
+				{ "property": "employees.firstName", "operator": "$eq", "operands": ["John"] }
 				""";
 		JsonNode json = objectMapper.readTree(query);
 
 		Specification<Company> specification = companyCqlInterpreter.build(json);
-		System.err.println(companyRepository.findAll(specification));
-
 		InvalidDataAccessApiUsageException e = assertThrows(InvalidDataAccessApiUsageException.class,
 				() -> companyRepository.findAll(specification),
 				"Une propriété non jointe devrait déclencher une exception");
 		assertThat(e.getCause().getClass()).isEqualTo(IllegalArgumentException.class);
-		assertThat(e.getCause().getMessage()).isEqualTo("Le chemin de propriété <employees.lastName> n'est pas supporté");
+		assertThat(e.getCause().getMessage()).isEqualTo("Le chemin de propriété <employees.firstName> n'est pas supporté");
 	}
 
 	@Test
