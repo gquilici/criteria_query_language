@@ -109,6 +109,21 @@ class CriteriaQueryLanguageApplicationTests {
 	}
 
 	@Test
+	@Transactional
+	void requestCollectionJoinField() throws JsonMappingException, JsonProcessingException {
+		String query = """
+				{ "property": "employees.code", "operator": "$sw", "operands": ["EMP"] }
+				""";
+		JsonNode json = objectMapper.readTree(query);
+
+		Specification<Company> specification = companyCqlInterpreter.build(json);
+		List<Company> companies = companyRepository.findAll(specification);
+
+		assertThat(companies).hasSize(2);
+		assertThat(companies).contains(company1, company1);
+	}
+
+	@Test
 	void requestWithIgnoreCase() throws JsonMappingException, JsonProcessingException {
 		String query = """
 				{ "property": "lastName", "operator": { "code": "$eq",  "ignoreCase": true }, "operands": ["dOE"] }
@@ -139,7 +154,17 @@ class CriteriaQueryLanguageApplicationTests {
 	@Test
 	void requestWithExists() throws JsonMappingException, JsonProcessingException {
 		String query = """
-				{ "property": "code", "operator": { "code": "$ex", "filter": { "property": "employees.lastName", "operator": "$in", "operands": ["Doe", "Doppler"] } } }
+				{
+				  "property": "code",
+				  "operator": {
+				    "code": "$ex",
+				    "filter": {
+				      "property": "employees.lastName",
+				      "operator": "$in",
+				      "operands": ["Doe", "Doppler"]
+				    }
+				  }
+				}
 				""";
 		JsonNode json = objectMapper.readTree(query);
 
