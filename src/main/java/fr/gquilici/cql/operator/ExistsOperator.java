@@ -21,6 +21,7 @@ public abstract class ExistsOperator<N> implements Operator<N> {
 	@SuppressWarnings("unchecked")
 	public <T> Specification<T> build(Filter<N> filter) {
 		Filter<N> subqueryFilter = parseSubqueryFilter(filter);
+		String joinProperty = parseJoinProperty(filter);
 		return (root, query, builder) -> {
 			// SELECT clause
 			Subquery<Integer> subquery = query.subquery(Integer.class);
@@ -29,8 +30,8 @@ public abstract class ExistsOperator<N> implements Operator<N> {
 			// FROM clause
 			Class<T> targetType = (Class<T>) root.getJavaType();
 			Root<T> subqueryRoot = subquery.from(targetType);
-			Path<?> rootPath = pathResolver.resolve(root, filter.property());
-			Path<?> subqueryPath = pathResolver.resolve(subqueryRoot, filter.property());
+			Path<?> rootPath = pathResolver.resolve(root, joinProperty);
+			Path<?> subqueryPath = pathResolver.resolve(subqueryRoot, joinProperty);
 
 			// WHERE clause
 			Predicate joinPredicate = builder.equal(rootPath, subqueryPath);
@@ -42,5 +43,7 @@ public abstract class ExistsOperator<N> implements Operator<N> {
 	}
 
 	protected abstract Filter<N> parseSubqueryFilter(Filter<N> filter);
+
+	protected abstract String parseJoinProperty(Filter<N> filter);
 
 }

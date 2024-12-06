@@ -24,4 +24,9 @@ public class JsonExistsOperator extends ExistsOperator<JsonNode> {
 		return filterParser.parse(subqueryFilter);
 	}
 
+	@Override
+	protected String parseJoinProperty(Filter<JsonNode> filter) {
+		return filter.property();
+	}
+
 }
