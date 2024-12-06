@@ -68,7 +68,7 @@ public class Company {
 
 	@Override
 	public String toString() {
-		return "Organisation [code=" + code + ", name=" + name + ", employees=" + employees + "]";
+		return "Organisation {code=" + code + ", name=" + name + ", employees=" + employees + "}";
 	}
 
 }
