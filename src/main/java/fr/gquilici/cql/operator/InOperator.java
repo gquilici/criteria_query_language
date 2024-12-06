@@ -29,7 +29,6 @@ public class InOperator<N> implements Operator<N> {
 		return (root, query, builder) -> {
 			Path<?> path = pathResolver.resolve(root, filter.property());
 			Class<?> type = path.getJavaType();
-			// TODO checkAcceptedType(type);
 
 			if (type.equals(String.class)) {
 				List<String> operands = operandsParser.parseAsString(filter.operands());

@@ -27,7 +27,6 @@ public class EqualsOperator<N> implements Operator<N> {
 		return (root, query, builder) -> {
 			Path<?> path = pathResolver.resolve(root, filter.property());
 			Class<?> type = path.getJavaType();
-			// TODO checkAcceptedType(type);
 
 			List<?> operands = operandsParser.parseAs(filter.operands(), type);
 			if (operands.get(0) == null) {

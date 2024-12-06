@@ -12,7 +12,7 @@ public class JsonOperandsParser implements OperandsParser<JsonNode> {
 
 	@Override
 	public List<String> parseAsString(List<JsonNode> operands) {
-		return operands.stream().map(JsonNode::textValue).toList();
+		return operands.stream().map(JsonNode::asText).toList();
 	}
 
 	@Override
@@ -42,12 +42,12 @@ public class JsonOperandsParser implements OperandsParser<JsonNode> {
 
 	@Override
 	public List<LocalDate> parseAsLocalDate(List<JsonNode> operands) {
-		return operands.stream().map(JsonNode::textValue).map(LocalDate::parse).toList();
+		return operands.stream().map(JsonNode::asText).map(LocalDate::parse).toList();
 	}
 
 	@Override
 	public List<Instant> parseAsInstant(List<JsonNode> operands) {
-		return operands.stream().map(JsonNode::textValue).map(Instant::parse).toList();
+		return operands.stream().map(JsonNode::asText).map(Instant::parse).toList();
 	}
 
 }
