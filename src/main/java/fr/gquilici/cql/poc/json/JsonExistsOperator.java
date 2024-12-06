@@ -10,6 +10,7 @@ import fr.gquilici.cql.operator.PathResolver;
 public class JsonExistsOperator extends ExistsOperator<JsonNode> {
 
 	private static final String SUBQUERY_FILTER_FIELD = "filter";
+	private static final String JOIN_PROPERTY_FIELD = "joinProperty";
 
 	private final FilterParser<JsonNode> filterParser;
 
@@ -26,7 +27,8 @@ public class JsonExistsOperator extends ExistsOperator<JsonNode> {
 
 	@Override
 	protected String parseJoinProperty(Filter<JsonNode> filter) {
-		return filter.property();
+		JsonNode joinProperty = filter.options().required(JOIN_PROPERTY_FIELD);
+		return joinProperty.textValue();
 	}
 
 }

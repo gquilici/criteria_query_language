@@ -155,9 +155,9 @@ class CriteriaQueryLanguageApplicationTests {
 	void requestWithExists() throws JsonMappingException, JsonProcessingException {
 		String query = """
 				{
-				  "property": "code",
 				  "operator": {
 				    "code": "$ex",
+				    "joinProperty": "code",
 				    "filter": {
 				      "property": "employees.lastName",
 				      "operator": "$in",
