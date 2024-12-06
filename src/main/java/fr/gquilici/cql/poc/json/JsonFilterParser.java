@@ -46,7 +46,7 @@ public class JsonFilterParser implements FilterParser<JsonNode> {
 		if (operators.containsKey(operatorCode)) {
 			return operators.get(operatorCode);
 		}
-		throw new IllegalArgumentException("L'opérateur <" + operatorCode + "> est inconnu dans ce dialecte !");
+		throw new IllegalArgumentException("Operator <" + operatorCode + "> is unknown in JsonCQL");
 	}
 
 	private List<JsonNode> parseOperands(JsonNode criteria) {

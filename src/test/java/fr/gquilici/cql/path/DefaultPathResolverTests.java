@@ -79,7 +79,7 @@ public class DefaultPathResolverTests {
 
 		Exception e = assertThrows(IllegalArgumentException.class, () -> pathResolver.resolve(root, null),
 				"A null property should raise an exception");
-		assertThat(e.getMessage()).isEqualTo("Le chemin de la propriété cible ne doit pas être nul");
+		assertThat(e.getMessage()).isEqualTo("Argument <property> should not be null");
 	}
 
 	@Test
@@ -89,7 +89,8 @@ public class DefaultPathResolverTests {
 
 		Exception e = assertThrows(IllegalArgumentException.class, () -> pathResolver.resolve(root, "foobar"),
 				"An unknown property should raise an exception");
-		assertThat(e.getMessage()).isEqualTo("Le chemin de propriété <foobar> n'est pas supporté");
+		assertThat(e.getMessage())
+				.isEqualTo("Property <foobar> is not supported for target type <fr.gquilici.cql.poc.Company>");
 	}
 
 }

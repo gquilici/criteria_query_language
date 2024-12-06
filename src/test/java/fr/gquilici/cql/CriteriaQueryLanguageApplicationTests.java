@@ -75,7 +75,7 @@ class CriteriaQueryLanguageApplicationTests {
 
 		JsonCqlInterpreterFactory cqlInterpreterFactory = new JsonCqlInterpreterFactory();
 		cqlInterpreterFactory.restrictPaths(Company.class, "employees.firstName");
-		
+
 		companyCqlInterpreter = cqlInterpreterFactory.build();
 		employeeCqlInterpreter = cqlInterpreterFactory.build();
 	}
@@ -185,10 +185,9 @@ class CriteriaQueryLanguageApplicationTests {
 		Specification<Employee> specification = employeeCqlInterpreter.build(json);
 
 		InvalidDataAccessApiUsageException e = assertThrows(InvalidDataAccessApiUsageException.class,
-				() -> employeeRepository.findAll(specification),
-				"Une propriété manquante devrait déclencher une exception");
+				() -> employeeRepository.findAll(specification), "A missing property should raise an exception");
 		assertThat(e.getCause().getClass()).isEqualTo(IllegalArgumentException.class);
-		assertThat(e.getCause().getMessage()).isEqualTo("Le chemin de la propriété cible ne doit pas être nul");
+		assertThat(e.getCause().getMessage()).isEqualTo("Argument <property> should not be null");
 	}
 
 	@Test
@@ -201,9 +200,9 @@ class CriteriaQueryLanguageApplicationTests {
 		Specification<Employee> specification = employeeCqlInterpreter.build(json);
 
 		InvalidDataAccessApiUsageException e = assertThrows(InvalidDataAccessApiUsageException.class,
-				() -> employeeRepository.findAll(specification), "Une propriété null devrait déclencher une exception");
+				() -> employeeRepository.findAll(specification), "A null property should raise an exception");
 		assertThat(e.getCause().getClass()).isEqualTo(IllegalArgumentException.class);
-		assertThat(e.getCause().getMessage()).isEqualTo("Le chemin de la propriété cible ne doit pas être nul");
+		assertThat(e.getCause().getMessage()).isEqualTo("Argument <property> should not be null");
 	}
 
 	@Test
@@ -216,10 +215,10 @@ class CriteriaQueryLanguageApplicationTests {
 		Specification<Employee> specification = employeeCqlInterpreter.build(json);
 
 		InvalidDataAccessApiUsageException e = assertThrows(InvalidDataAccessApiUsageException.class,
-				() -> employeeRepository.findAll(specification),
-				"Une propriété inconnue devrait déclencher une exception");
+				() -> employeeRepository.findAll(specification), "An unknown property should raise an exception");
 		assertThat(e.getCause().getClass()).isEqualTo(IllegalArgumentException.class);
-		assertThat(e.getCause().getMessage()).isEqualTo("Le chemin de propriété <name> n'est pas supporté");
+		assertThat(e.getCause().getMessage())
+				.isEqualTo("Property <name> is not supported for target type <fr.gquilici.cql.poc.Employee>");
 	}
 
 	@Test
@@ -232,10 +231,10 @@ class CriteriaQueryLanguageApplicationTests {
 
 		Specification<Company> specification = companyCqlInterpreter.build(json);
 		InvalidDataAccessApiUsageException e = assertThrows(InvalidDataAccessApiUsageException.class,
-				() -> companyRepository.findAll(specification),
-				"Une propriété non jointe devrait déclencher une exception");
+				() -> companyRepository.findAll(specification), "An unreachable property should raise an exception");
 		assertThat(e.getCause().getClass()).isEqualTo(IllegalArgumentException.class);
-		assertThat(e.getCause().getMessage()).isEqualTo("Le chemin de propriété <employees.firstName> n'est pas supporté");
+		assertThat(e.getCause().getMessage()).isEqualTo(
+				"Property <employees.firstName> is not authorized for target type <fr.gquilici.cql.poc.Company>");
 	}
 
 	@Test
@@ -248,8 +247,7 @@ class CriteriaQueryLanguageApplicationTests {
 		Specification<Employee> specification = employeeCqlInterpreter.build(json);
 
 		InvalidDataAccessApiUsageException e = assertThrows(InvalidDataAccessApiUsageException.class,
-				() -> employeeRepository.findAll(specification),
-				"Un opérateur manquant devrait déclencher une exception");
+				() -> employeeRepository.findAll(specification), "A missing operator should raise an exception");
 		assertThat(e.getCause().getClass()).isEqualTo(IllegalArgumentException.class);
 		assertThat(e.getCause().getMessage()).isEqualTo("No value for property 'operator' of `ObjectNode`");
 	}
@@ -264,9 +262,9 @@ class CriteriaQueryLanguageApplicationTests {
 		Specification<Employee> specification = employeeCqlInterpreter.build(json);
 
 		InvalidDataAccessApiUsageException e = assertThrows(InvalidDataAccessApiUsageException.class,
-				() -> employeeRepository.findAll(specification), "Un opérateur null devrait déclencher une exception");
+				() -> employeeRepository.findAll(specification), "A null operator should raise an exception");
 		assertThat(e.getCause().getClass()).isEqualTo(IllegalArgumentException.class);
-		assertThat(e.getCause().getMessage()).isEqualTo("L'opérateur <null> est inconnu dans ce dialecte !");
+		assertThat(e.getCause().getMessage()).isEqualTo("Operator <null> is unknown in JsonCQL");
 	}
 
 	@Test
@@ -279,10 +277,9 @@ class CriteriaQueryLanguageApplicationTests {
 		Specification<Employee> specification = employeeCqlInterpreter.build(json);
 
 		InvalidDataAccessApiUsageException e = assertThrows(InvalidDataAccessApiUsageException.class,
-				() -> employeeRepository.findAll(specification),
-				"Un opérateur inconnu devrait déclencher une exception");
+				() -> employeeRepository.findAll(specification), "An unknown operator should raise an exception");
 		assertThat(e.getCause().getClass()).isEqualTo(IllegalArgumentException.class);
-		assertThat(e.getCause().getMessage()).isEqualTo("L'opérateur <$equals> est inconnu dans ce dialecte !");
+		assertThat(e.getCause().getMessage()).isEqualTo("Operator <$equals> is unknown in JsonCQL");
 	}
 
 	@Test
@@ -320,8 +317,7 @@ class CriteriaQueryLanguageApplicationTests {
 
 		Specification<Employee> specification = employeeCqlInterpreter.build(json);
 		ArrayIndexOutOfBoundsException e = assertThrows(ArrayIndexOutOfBoundsException.class,
-				() -> employeeRepository.findAll(specification),
-				"Un opérateur inconnu devrait déclencher une exception");
+				() -> employeeRepository.findAll(specification), "A missing operand should raise an exception");
 		assertThat(e.getMessage()).isEqualTo("Index 0 out of bounds for length 0");
 	}
 

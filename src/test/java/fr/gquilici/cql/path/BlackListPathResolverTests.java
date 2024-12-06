@@ -126,8 +126,10 @@ public class BlackListPathResolverTests {
 		Root<Company> root = query.from(Company.class);
 
 		Exception e = assertThrows(IllegalArgumentException.class,
-				() -> pathResolver.resolve(root, "employees.lastName"), "An unreachable property should raise an exception");
-		assertThat(e.getMessage()).isEqualTo("Le chemin de propriété <employees.lastName> n'est pas supporté");
+				() -> pathResolver.resolve(root, "employees.lastName"),
+				"An unreachable property should raise an exception");
+		assertThat(e.getMessage()).isEqualTo(
+				"Property <employees.lastName> is not authorized for target type <fr.gquilici.cql.poc.Company>");
 	}
 
 }

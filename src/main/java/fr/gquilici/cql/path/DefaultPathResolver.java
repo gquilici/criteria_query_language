@@ -10,7 +10,7 @@ public class DefaultPathResolver implements PathResolver {
 
 	@Override
 	public <R, T> Path<R> resolve(Root<T> root, String property) {
-		Assert.notNull(property, "Le chemin de la propriété cible ne doit pas être nul");
+		Assert.notNull(property, "Argument <property> should not be null");
 		try {
 			String[] segments = property.split("\\.");
 			if (segments.length == 1) {
@@ -23,7 +23,8 @@ public class DefaultPathResolver implements PathResolver {
 			}
 			return path.get(segments[segments.length - 1]);
 		} catch (Exception e) {
-			throw new IllegalArgumentException("Le chemin de propriété <" + property + "> n'est pas supporté", e);
+			throw new IllegalArgumentException("Property <" + property + "> is not supported for target type <"
+					+ root.getJavaType().getName() + ">", e);
 		}
 	}
 

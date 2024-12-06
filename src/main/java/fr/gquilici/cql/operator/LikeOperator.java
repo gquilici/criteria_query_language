@@ -39,8 +39,8 @@ public class LikeOperator<N> implements Operator<N> {
 			Path<?> path = pathResolver.resolve(root, filter.property());
 			Class<?> type = path.getJavaType();
 			if (!String.class.equals(type)) {
-				throw new UnsupportedOperationException("L'opérateur <" + getClass().getSimpleName()
-						+ "> ne prend pas en charge le type d'opérande <" + type.getSimpleName() + ">");
+				throw new UnsupportedOperationException("Operator <" + getClass().getName()
+						+ "> does not support operands of type <" + type.getName() + ">");
 			}
 
 			List<String> operands = operandsParser.parseAsString(filter.operands());

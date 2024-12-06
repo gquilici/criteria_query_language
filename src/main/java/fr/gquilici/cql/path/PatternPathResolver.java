@@ -30,7 +30,8 @@ public abstract class PatternPathResolver extends DefaultPathResolver {
 	@Override
 	public <R, T> Path<R> resolve(Root<T> root, String property) {
 		if (!isAuthorized(root, property)) {
-			throw new IllegalArgumentException("Le chemin de propriété <" + property + "> n'est pas supporté");
+			throw new IllegalArgumentException("Property <" + property + "> is not authorized for target type <"
+					+ root.getJavaType().getName() + ">");
 		}
 		return super.resolve(root, property);
 	}

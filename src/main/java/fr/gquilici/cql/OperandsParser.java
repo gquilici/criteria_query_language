@@ -37,8 +37,7 @@ public interface OperandsParser<N> {
 		if (type.isEnum()) {
 			return parseAsEnumValue(operands, type);
 		}
-		throw new UnsupportedOperationException(
-				"Le type d'opérande <" + type.getSimpleName() + "> n'est pas pris en charge");
+		throw new UnsupportedOperationException("Unsupported operand type <" + type.getName() + ">");
 	}
 
 	public List<String> parseAsString(List<N> operands);
@@ -64,8 +63,7 @@ public interface OperandsParser<N> {
 		try {
 			valueOf = type.getMethod("valueOf", String.class);
 		} catch (NoSuchMethodException | SecurityException e) {
-			throw new IllegalArgumentException(
-					"Impossible d'accéder à la méthode <valueOf> de l'enum <" + type.getSimpleName() + ">", e);
+			throw new IllegalArgumentException("Unable to get method <" + type.getName() + "#valueOf(String)>", e);
 		}
 
 		List<T> list = new ArrayList<>();
@@ -73,11 +71,11 @@ public interface OperandsParser<N> {
 			try {
 				list.add((T) valueOf.invoke(null, operand));
 			} catch (IllegalAccessException | IllegalArgumentException e) {
-				throw new IllegalArgumentException(
-						"Impossible d'invoquer la méthode <valueOf> de l'enum <" + type.getSimpleName() + ">", e);
+				throw new IllegalArgumentException("Unable to invoke method <" + type.getName() + "#valueOf(String)>",
+						e);
 			} catch (InvocationTargetException e) {
-				throw new IllegalArgumentException(
-						"La valeur <" + operand + "> ne fait pas partie de l'enum <" + type.getSimpleName() + ">", e);
+				throw new IllegalArgumentException("Unknown value <" + operand + "> in enum <" + type.getName() + ">",
+						e);
 			}
 		}
 		return list;

@@ -61,8 +61,8 @@ public class BetweenOperator<N> implements Operator<N> {
 				List<Instant> operands = operandsParser.parseAsInstant(filter.operands());
 				return builder.between((Path<Instant>) path, operands.get(0), operands.get(1));
 			}
-			throw new UnsupportedOperationException("L'opérateur <" + getClass().getSimpleName()
-					+ "> ne prend pas en charge le type d'opérande <" + type.getSimpleName() + ">");
+			throw new UnsupportedOperationException("Operator <" + getClass().getName()
+					+ "> does not support operands of type <" + type.getName() + ">");
 		};
 	}
 
